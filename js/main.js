@@ -1,3 +1,5 @@
+// $0 can check 
+
 var app = {
 	indexFromEl: function(eventElement) {//button.destroy
   	var id = eventElement.closest('li').data('id'); //every todos li has an id associated with it, you would want to grab it to get the associated index for deleting/updating/modifying
@@ -63,6 +65,59 @@ var app = {
     
     $input.val(''); //clear the input field
     this.render;
+  }, 
+
+  toggle : function(e) {
+    //you would want to change the status of completed property to true/false
+    //find the element's id
+      //this.indexFromEl
+    //change completed
+    //render
+    var i = this.indexFromEl(e.target);
+    this.todos[i].completed = !this.todos[i].completed;
+    this.render();
+  },
+
+  bindEvents: function() {
+    //there are several elements and events you need to bind for this app
+
+  },
+
+  getActiveTodos: function() {
+    return this.todos.filter(function(todo) {
+      return !todo.completed;
+    });
+  },
+
+  getCompletedTodos: function() {
+    return this.todos.filter(function(todo) {
+      return todo.completed; 
+    });
+  },
+
+  getFilteredTodos: function() {
+    if (this.filter === 'active') {
+      return this.getActiveTodos();
+    }
+
+    if(this.filter === 'completed') {
+      return this.getCompletedTodos();
+    }
+
+    return this.todos;
+  },
+
+  toggleAll : function(e) {
+    //change all the todos array's element's status of completed to be true
+    var isChecked = $(e.target).prop('checked');
+
+    this.todos.each(function(todo) {
+      todo.completed = isChecked;
+    });
+  },
+
+  destroyCompleted: function() {
+
   }
   
   
