@@ -224,6 +224,44 @@ var util = {
     this.filter = 'all'; //set filter to all for the filtered todos array items
     this.render();
   },
+
+  render : function() {
+    //elements: inputbox - new-todo- put back to focus once manipulation is done for the todo-list
+              //section with id main
+              //toggle
+              //toggle-all- focus
+              //being called when updating, creating, deleting
+    //sets the filtered todolist in an object
+    //puts todos objects inside todolist element
+      // the html being a template
+    var todos = this.getFilteredTodos(); //returns todo list with filters
+    ('#todolist').html(this.todoTemplate(todos));
+    ('#main').toggle(todos.length > 0); //hides/shows todos item
+    ('#toggleAll').prop('checked', this.getActiveTodos().length === 0); //the status of the toggle-all button, greys out if theres an active todo item. otherwise it turns on.
+    this.renderFooter();
+    $("#new-todo").focus(); //puts back the cursor to the new-todo input box
+    util.store('todos-jquery', this.todos);
+  },
+
+  renderFooter : function() {
+    //there are four elements
+    //how many items left - need a active todo count 
+    //filters- All, Active, Completed
+    //if there is a completed item, 'clear completed' button shows up
+    var todoCount = this.todos.length;
+    var activeTodoCount = this.getActiveTodos().length;
+    var tempalte = this.footerTemplate({
+      activeTodoCount = activeTodoCount,
+      activeTodoWord: utl.pluralize(activeTodoCount, 'item'),
+      completedTodos: todoCount - activeTodoCount,
+      filter: this.filter
+    });
+
+    //attach this object in the html footer obj
+    $('#footer').toggle(todoCount > 0).html(template);
+  },
+
+  
   
   
 
