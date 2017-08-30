@@ -19,17 +19,43 @@ var util = {
       return uuid;
     },
 
-    pluralize : funcrion(count, word) {
+    pluralize : function(count, word) {
       return count === 1? word : word + 's'; 
+    },
+
+    store: function(namespace, data) {
+      if (arguments > 1) {
+        return localStorage.setItem(namespace, JSON.stringify(data)); //(name, value)
+
+      } else {
+        var store = localStorage.getItem(namespace);
+        return store && JSON.parse(store) || [];
+      }
     }
 
   };
 
 
 
-  var ENTER_KEY = 13;
-  var ESCAPE_KEY = 17;
+var ENTER_KEY = 13;
+var ESCAPE_KEY = 17;
 
+var App = { 
+  //setup the data for the application, compile the template for main body & footer
+  init: function() {
+    this.todos = util.store('todos-jquery'); //get the data if there is already in the local storage.
+    this.todoTemplate = Handlebars.compile($('#todo-template').html());
+    this.footerTemplate = Handlebars.complie($('#footer-template').html());
+    this.bindEvents();
+    
+    new Router({
+      '/:filter' : function(filter) {
+        this.filter = filter;
+        this.render();
+      }.bind(this);
+    }).init('/all');
+
+  },
 
 
 	indexFromEl: function(eventElement) {//button.destroy
@@ -240,7 +266,7 @@ var util = {
     ('#toggleAll').prop('checked', this.getActiveTodos().length === 0); //the status of the toggle-all button, greys out if theres an active todo item. otherwise it turns on.
     this.renderFooter();
     $("#new-todo").focus(); //puts back the cursor to the new-todo input box
-    util.store('todos-jquery', this.todos);
+    util.store('todos-jquery', this.todos);//storing of data in the local storage 
   },
 
   renderFooter : function() {
@@ -261,7 +287,10 @@ var util = {
     $('#footer').toggle(todoCount > 0).html(template);
   },
 
+  //todoTemplate, footerTemplate - handlebars.js templating library
   
+
+}
   
   
 
