@@ -48,13 +48,16 @@ var App = {
     this.footerTemplate = Handlebars.complie($('#footer-template').html());
     this.bindEvents();
     
+    //Router uses director.js library.
+    //assigns the appropriate filter, changes url and renders it. You have to bind 'this'. 
+    //init creates a default case, if your filter is not assigned.
+
     new Router({
       '/:filter' : function(filter) {
         this.filter = filter;
         this.render();
       }.bind(this);
     }).init('/all');
-
   },
 
 
